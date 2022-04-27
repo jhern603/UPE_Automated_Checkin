@@ -17,6 +17,8 @@ const member = async (pid) => {
           resolve(records[0].fields);
         }
       });
+  }).catch((err) => {
+    console.error(err);
   });
 };
 

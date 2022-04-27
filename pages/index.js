@@ -6,7 +6,7 @@ import {pushSingleMember} from "./api/entry"
 export default function Home() {
   const userCheckin = async (e) => {
     e.preventDefault();
-    pushSingleMember(e.target.PID.value)
+    const status = pushSingleMember(e.target.PID.value);
   }
   return (
     <div className={styles.container}>
