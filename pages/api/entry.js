@@ -4,59 +4,59 @@ const airtable = require('airtable');
 const base = new airtable({ apiKey: conf.API_KEY }).base(conf.BASE_ID);
 const _ = require('lodash');
 let PID = [];
-const member = async (pid) => {
+
+const getMember = async (pid) => {
   return new Promise((resolve, reject) => {
     base(conf.MEMBERS_TABLE_ID)
       .select({
         view: 'All Members',
         filterByFormula: `({Panther ID} = \'${pid}\')`,
       })
-      .firstPage(function (err, records) {
-        if (err) reject(err);
-        else {
-          resolve(records[0].fields);
-        }
+      .firstPage((err, records) => {
+        if (err)
+          return reject(err);
+        else if (records.length < 1) 
+          return "Student ID not found!"
+        else
+          return resolve(records[0].fields);
       });
-  }).catch((err) => {
-    console.error(err);
-  });
+  })
 };
+
+// mmmmmmm
+const checkAlreadyCheckedIn = async (pid) => {
+    return new Promise((resolve, reject) => {
+    base(conf.EXPERIMENT_TABLE_ID)
+      .select({
+        view: 'All Members',
+        filterByFormula: `({Panther ID} = \'${pid}\')`,
+      })
+      .firstPage((err, records) => {
+        if (err)
+          return reject(err);
+        else if (records.length < 1) 
+          return "Student ID not found!"
+        else
+          return resolve(records[0].fields);
+      });
+  })
+}
 
 export const addToList = (id) => {
   PID = [...PID, id.toString()];
 };
 
-export const pushMultipleMembers = () => {
-  PID.forEach((elem) => {
-    member(elem)
-      .then((res) => {
-        let omitted = _.omit(res, exclude);
-        base(conf.EXPERIMENT_TABLE_ID).create(omitted, function (err, records) {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          console.log('Successfully added: ', records.id);
-        });
-      })
-      .catch(function (err) {
-        console.error(err);
-      });
-    PID.pop(elem);
-  });
-};
-
 export const pushSingleMember = (id) => {
-  member(id.toString())
+  getMember(id.toString())
     .then((res) => {
       let omitted = _.omit(res, exclude);
       base(conf.EXPERIMENT_TABLE_ID).create(omitted, function (err, records) {
-        
+        if (err) return err;
         console.log('Successfully added: ', records.id);
-        return res;
+        return Promise.resolve();
       });
     })
     .catch((err) => {
-      console.error(err);
-    });
+      return err;
+    })
 };

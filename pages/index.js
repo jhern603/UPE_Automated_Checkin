@@ -4,10 +4,11 @@ import styles from '../styles/Home.module.css'
 import {pushSingleMember} from "./api/entry"
 
 export default function Home() {
-  const userCheckin = async (e) => {
+  const userCheckin = (e) => {
     e.preventDefault();
-    const status = pushSingleMember(e.target.PID.value);
+    pushSingleMember(e.target.PID.value)
   }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -21,6 +22,7 @@ export default function Home() {
           <label htmlFor="Panther ID">Panther ID</label>
           <input id="PID" type="text" autoComplete="off" required />
           <button type="submit">Submit</button>
+          <button type="reset">Reset Form</button>
        </form>
       </main>
 
