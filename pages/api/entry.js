@@ -20,11 +20,11 @@ const member = async (pid) => {
   });
 };
 
-const addToList = (id) => {
+export const addToList = (id) => {
   PID = [...PID, id.toString()];
 };
 
-const pushMultipleMembers = () => {
+export const pushMultipleMembers = () => {
   PID.forEach((elem) => {
     member(elem)
       .then((res) => {
@@ -44,8 +44,8 @@ const pushMultipleMembers = () => {
   });
 };
 
-const pushSingleMember = (id) => {
-  member(id)
+export const pushSingleMember = (id) => {
+  member(id.toString())
     .then((res) => {
       let omitted = _.omit(res, exclude);
       console.log(omitted);
