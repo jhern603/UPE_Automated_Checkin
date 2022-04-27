@@ -48,16 +48,13 @@ export const pushSingleMember = (id) => {
   member(id.toString())
     .then((res) => {
       let omitted = _.omit(res, exclude);
-      console.log(omitted);
       base(conf.EXPERIMENT_TABLE_ID).create(omitted, function (err, records) {
-        if (err) {
-          console.error(err);
-          return;
-        }
+        
         console.log('Successfully added: ', records.id);
+        return res;
       });
     })
-    .catch(function (err) {
+    .catch((err) => {
       console.error(err);
     });
 };
