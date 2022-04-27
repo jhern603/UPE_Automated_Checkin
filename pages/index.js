@@ -6,7 +6,7 @@ import {pushSingleMember} from "./api/entry"
 export default function Home() {
   const userCheckin = async (e) => {
     e.preventDefault();
-    pushSingleMember(e.taget.PID.value)
+    pushSingleMember(e.target.PID.value)
   }
   return (
     <div className={styles.container}>
@@ -18,8 +18,8 @@ export default function Home() {
 
       <main className={styles.main}>
         <form onSubmit={userCheckin}>
-          <label for="Panther ID">Panther ID</label>
-          <input id="PID" type="text" autocomplete="off" required />
+          <label htmlFor="Panther ID">Panther ID</label>
+          <input id="PID" type="text" autoComplete="off" required />
           <button type="submit">Submit</button>
        </form>
       </main>
