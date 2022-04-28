@@ -1,14 +1,23 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import {pushSingleMember} from "./api/entry"
+import React, { useState } from 'react';
+import {pushSingleMember, pushMultipleMembers, addToList} from "./api/entry"
 
 export default function Home() {
+  const [result, setResult] = useState();
+  const [multiResult, setMultiResult] = useState([]);
   const userCheckin = (e) => {
     e.preventDefault();
-    pushSingleMember(e.target.PID.value)
+    pushSingleMember(e.target.PID.value, setResult);
   }
-
+    const multiUserCheckin = (e) => {
+      e.preventDefault();
+      var lines = e.target.PID.value.replace(/\r\n\,/g, "\n").split("\n").filter(line => line);
+      addToList(lines);
+      pushMultipleMembers(setMultiResult);
+      // setMultiResult([]);
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -18,9 +27,24 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
+        <span className="test">{result}</span>
         <form onSubmit={userCheckin}>
-          <label htmlFor="Panther ID">Panther ID</label>
+          <label htmlFor="Student ID">Please enter your student ID</label>
+          <br/>
           <input id="PID" type="text" autoComplete="off" required />
+          <br/>
+          <button type="submit">Submit</button>
+          <button type="reset">Reset Form</button>
+        </form>
+
+        {
+          multiResult.forEach(result => { return <span className="test">{result}</span> })
+        }
+        <form onSubmit={multiUserCheckin}>
+          <label htmlFor="Student IDs">Please enter the student IDs to check-in</label>
+          <br/>
+          <textarea id="PID" type="text" autoComplete="off" required />
+          <br/>
           <button type="submit">Submit</button>
           <button type="reset">Reset Form</button>
        </form>
